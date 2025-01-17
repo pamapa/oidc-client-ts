@@ -64,7 +64,7 @@ export class MetadataService {
         const metadata = await this._jsonService.getJson(this._metadataUrl, { credentials: this._fetchRequestCredentials, timeoutInSeconds: this._settings.requestTimeoutInSeconds });
 
         logger.debug("merging remote JSON with seed metadata");
-        this._metadata = Object.assign({}, this._settings.metadataSeed, metadata);
+        this._metadata = Object.assign({}, metadata, this._settings.metadataSeed);
         return this._metadata;
     }
 

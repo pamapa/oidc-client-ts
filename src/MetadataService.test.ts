@@ -148,7 +148,7 @@ describe("MetadataService", () => {
             };
             subject = new MetadataService(new OidcClientSettingsStore(settings));
             const jsonService = subject["_jsonService"]; // access private member
-            jest.spyOn(jsonService, "getJson").mockImplementation(() => Promise.resolve({ jwks_uri: "two" }));
+            jest.spyOn(jsonService, "getJson").mockImplementation(() => Promise.resolve({ issuer: "two", jwks_uri: "two" }));
 
             // act
             const result = await subject.getMetadata();
