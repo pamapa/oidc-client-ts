@@ -143,6 +143,60 @@ describe("UserManager", () => {
             expect(loadMock).toHaveBeenCalledWith(user, false);
         });
 
+        it("should execute callbacks for userLoaded event if there is a user stored and the raiseEvent parameter is true", async () => {
+            // arrange
+            const user = new User({
+                access_token: "access_token",
+                token_type: "token_type",
+                profile: {} as UserProfile,
+            });
+            subject["_loadUser"] = jest.fn().mockReturnValue(user);
+            const cb = jest.fn();
+            subject.events.addUserLoaded(cb);
+
+            // act
+            await subject.getUser(true);
+
+            // assert
+            expect(cb).toHaveBeenCalled();
+        });
+
+        it("should not execute callbacks for userLoaded event if there is a user stored and the raiseEvent parameter is false", async () => {
+            // arrange
+            const user = new User({
+                access_token: "access_token",
+                token_type: "token_type",
+                profile: {} as UserProfile,
+            });
+            subject["_loadUser"] = jest.fn().mockReturnValue(user);
+            const cb = jest.fn();
+            subject.events.addUserLoaded(cb);
+
+            // act
+            await subject.getUser(false);
+
+            // assert
+            expect(cb).not.toHaveBeenCalled();
+        });
+
+        it("should not execute callbacks for userLoaded event if there is a user stored and the raiseEvent parameter is not defined", async () => {
+            // arrange
+            const user = new User({
+                access_token: "access_token",
+                token_type: "token_type",
+                profile: {} as UserProfile,
+            });
+            subject["_loadUser"] = jest.fn().mockReturnValue(user);
+            const cb = jest.fn();
+            subject.events.addUserLoaded(cb);
+
+            // act
+            await subject.getUser();
+
+            // assert
+            expect(cb).not.toHaveBeenCalled();
+        });
+
         it("should return null if there is no user stored", async () => {
             // arrange
             subject["_loadUser"] = jest.fn().mockReturnValue(null);

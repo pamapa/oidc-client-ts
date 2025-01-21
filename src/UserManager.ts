@@ -131,14 +131,15 @@ export class UserManager {
     /**
      * Load the `User` object for the currently authenticated user.
      *
+     * @param raiseEvent If `true`, the `UserLoaded` event will be raised. Defaults to false.
      * @returns A promise
      */
-    public async getUser(): Promise<User | null> {
+    public async getUser(raiseEvent = false): Promise<User | null> {
         const logger = this._logger.create("getUser");
         const user = await this._loadUser();
         if (user) {
             logger.info("user loaded");
-            await this._events.load(user, false);
+            await this._events.load(user, raiseEvent);
             return user;
         }
 

@@ -1005,7 +1005,7 @@ export class UserManager {
     protected readonly _events: UserManagerEvents;
     // (undocumented)
     generateDPoPJkt(dpopSettings: DPoPSettings): Promise<string | undefined>;
-    getUser(): Promise<User | null>;
+    getUser(raiseEvent?: boolean): Promise<User | null>;
     // (undocumented)
     protected readonly _iframeNavigator: INavigator;
     // (undocumented)
