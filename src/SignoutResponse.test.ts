@@ -38,5 +38,14 @@ describe("SignoutResponse", () => {
             // assert
             expect(subject.state).toEqual("foo");
         });
+        
+        it("should read url_state", () => {
+            // act
+            const subject = new SignoutResponse(new URLSearchParams("state=foo;bar"));
+
+            // assert
+            expect(subject.state).toEqual("foo");
+            expect(subject.url_state).toEqual("bar");
+        });
     });
 });

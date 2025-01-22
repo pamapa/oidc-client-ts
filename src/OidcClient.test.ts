@@ -1,7 +1,7 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-import { CryptoUtils, JwtUtils } from "./utils";
+import { CryptoUtils, JwtUtils, URL_STATE_DELIMITER } from "./utils";
 import type { ErrorResponse } from "./errors";
 import type { JwtClaims } from "./Claims";
 import { OidcClient } from "./OidcClient";
@@ -838,6 +838,7 @@ describe("OidcClient", () => {
                 state: "foo",
                 post_logout_redirect_uri: "bar",
                 id_token_hint: "baz",
+                url_state: "qux",
             });
 
             // assert
@@ -847,6 +848,7 @@ describe("OidcClient", () => {
             expect(url).toContain("http://sts/signout");
             expect(url).toContain("post_logout_redirect_uri=bar");
             expect(url).toContain("id_token_hint=baz");
+            expect(url).toContain(encodeURIComponent(URL_STATE_DELIMITER + "qux"));
         });
 
         it("should pass params to SignoutRequest w/o id_token_hint and client_id", async () => {

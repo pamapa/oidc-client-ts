@@ -1001,6 +1001,7 @@ describe("UserManager", () => {
                 extraQueryParams: { q : "q" },
                 state: "state",
                 post_logout_redirect_uri: "http://app/extra_callback",
+                url_state: "foo",
             };
 
             // act

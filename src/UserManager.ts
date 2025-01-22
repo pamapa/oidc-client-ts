@@ -25,7 +25,7 @@ export type ExtraSigninRequestArgs = Pick<CreateSigninRequestArgs, "nonce" | "ex
 /**
  * @public
  */
-export type ExtraSignoutRequestArgs = Pick<CreateSignoutRequestArgs, "extraQueryParams" | "state" | "id_token_hint" | "post_logout_redirect_uri">;
+export type ExtraSignoutRequestArgs = Pick<CreateSignoutRequestArgs, "extraQueryParams" | "state" | "id_token_hint" | "post_logout_redirect_uri" | "url_state">;
 
 /**
  * @public

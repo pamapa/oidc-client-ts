@@ -331,6 +331,7 @@ export class OidcClient {
         id_token_hint,
         client_id,
         request_type,
+        url_state,
         post_logout_redirect_uri = this.settings.post_logout_redirect_uri,
         extraQueryParams = this.settings.extraQueryParams,
     }: CreateSignoutRequestArgs = {}): Promise<SignoutRequest> {
@@ -358,6 +359,7 @@ export class OidcClient {
             state_data: state,
             extraQueryParams,
             request_type,
+            url_state,
         });
 
         // house cleaning

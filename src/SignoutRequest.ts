@@ -1,7 +1,7 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-import { Logger } from "./utils";
+import { Logger, URL_STATE_DELIMITER } from "./utils";
 import { State } from "./State";
 
 /**
@@ -22,6 +22,7 @@ export interface SignoutRequestArgs {
     request_type?: string;
     /** custom "state", which can be used by a caller to have "data" round tripped */
     state_data?: unknown;
+    url_state?: string;
 }
 
 /**
@@ -35,7 +36,7 @@ export class SignoutRequest {
 
     public constructor({
         url,
-        state_data, id_token_hint, post_logout_redirect_uri, extraQueryParams, request_type, client_id,
+        state_data, id_token_hint, post_logout_redirect_uri, extraQueryParams, request_type, client_id, url_state,
     }: SignoutRequestArgs) {
         if (!url) {
             this._logger.error("ctor: No url passed");
@@ -53,10 +54,15 @@ export class SignoutRequest {
         if (post_logout_redirect_uri) {
             parsedUrl.searchParams.append("post_logout_redirect_uri", post_logout_redirect_uri);
 
-            if (state_data) {
-                this.state = new State({ data: state_data, request_type });
+            // Add state if either data needs to be stored, or url_state set for an intermediate proxy
+            if (state_data || url_state) {
+                this.state = new State({ data: state_data, request_type, url_state });
 
-                parsedUrl.searchParams.append("state", this.state.id);
+                let stateParam = this.state.id;
+                if (url_state) {
+                    stateParam = `${stateParam}${URL_STATE_DELIMITER}${url_state}`;
+                }
+                parsedUrl.searchParams.append("state", stateParam);
             }
         }
 

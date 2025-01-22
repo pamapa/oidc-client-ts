@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 import { SignoutRequest, type SignoutRequestArgs } from "./SignoutRequest";
+import { URL_STATE_DELIMITER } from "./utils";
 
 describe("SignoutRequest", () => {
 
@@ -70,9 +71,45 @@ describe("SignoutRequest", () => {
             expect(subject.url).toContain("state=" + subject.state!.id);
         });
 
+        it("should include state if post_logout_redirect_uri and url_state provided even if state_data is empty", () => {
+            // arrange
+            delete settings.state_data;
+            settings.url_state = "foo";
+
+            // act
+            subject = new SignoutRequest(settings);
+
+            // assert
+            expect(subject.state).toBeDefined();
+            expect(subject.url).toContain("state=" + subject.state!.id + encodeURIComponent(URL_STATE_DELIMITER + "foo"));
+        });
+
         it("should not include state if no post_logout_redirect_uri provided", () => {
             // arrange
             delete settings.post_logout_redirect_uri;
+
+            // act
+            subject = new SignoutRequest(settings);
+
+            // assert
+            expect(subject.url).not.toContain("state=");
+        });
+        
+        it("should include url_state", async () => {
+            // arrange
+            settings.url_state = "foo";
+
+            // act
+            subject = new SignoutRequest(settings);
+
+            // assert
+            expect(subject.url).toContain("state=" + subject.state!.id + encodeURIComponent(URL_STATE_DELIMITER + "foo"));
+        });
+
+        it("should not include state or url_state if no post_logout_redirect_uri provided", () => {
+            // arrange
+            delete settings.post_logout_redirect_uri;
+            settings.url_state = "foo";
 
             // act
             subject = new SignoutRequest(settings);
