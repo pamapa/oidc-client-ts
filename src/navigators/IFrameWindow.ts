@@ -43,6 +43,12 @@ export class IFrameWindow extends AbstractChildWindow {
         iframe.width = "0";
         iframe.height = "0";
 
+        // allow access to local storage
+        iframe.setAttribute(
+            "sandbox",
+            "allow-storage-access-by-user-activation allow-scripts allow-same-origin",
+        );
+
         window.document.body.appendChild(iframe);
         return iframe;
     }
