@@ -51,7 +51,7 @@
     "@types/node": "^22.10.1",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "eslint": "^9.18.0",
     "eslint-plugin-testing-library": "^7.1.1",
     "fake-indexeddb": "^6.0.0",
