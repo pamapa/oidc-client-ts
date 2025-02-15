@@ -1,10 +1,14 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-import { type OidcClientSettings, OidcClientSettingsStore } from "./OidcClientSettings";
+import {
+    type OidcClientSettings,
+    OidcClientSettingsStore,
+} from "./OidcClientSettings";
 import type { PopupWindowFeatures } from "./utils/PopupUtils";
 import { WebStorageStateStore } from "./WebStorageStateStore";
 import { InMemoryWebStorage } from "./InMemoryWebStorage";
+import type { StateStore } from "./StateStore";
 
 export const DefaultPopupWindowFeatures: PopupWindowFeatures = {
     location: false,
@@ -82,7 +86,7 @@ export interface UserManagerSettings extends OidcClientSettings {
      * Storage object used to persist User for currently authenticated user (default: window.sessionStorage, InMemoryWebStorage iff no window).
      *  E.g. `userStore: new WebStorageStateStore({ store: window.localStorage })`
      */
-    userStore?: WebStorageStateStore;
+    userStore?: StateStore;
 }
 
 /**
@@ -120,7 +124,7 @@ export class UserManagerSettingsStore extends OidcClientSettingsStore {
 
     public readonly accessTokenExpiringNotificationTimeInSeconds: number;
 
-    public readonly userStore: WebStorageStateStore;
+    public readonly userStore: StateStore;
 
     public constructor(args: UserManagerSettings) {
         const {
@@ -169,7 +173,10 @@ export class UserManagerSettingsStore extends OidcClientSettingsStore {
         this.iframeScriptOrigin = iframeScriptOrigin;
 
         this.silent_redirect_uri = silent_redirect_uri;
-        this.silentRequestTimeoutInSeconds = silentRequestTimeoutInSeconds || requestTimeoutInSeconds || DefaultSilentRequestTimeoutInSeconds;
+        this.silentRequestTimeoutInSeconds =
+            silentRequestTimeoutInSeconds ||
+            requestTimeoutInSeconds ||
+            DefaultSilentRequestTimeoutInSeconds;
         this.automaticSilentRenew = automaticSilentRenew;
         this.validateSubOnSilentRenew = validateSubOnSilentRenew;
         this.includeIdTokenInSilentRenew = includeIdTokenInSilentRenew;
@@ -184,13 +191,16 @@ export class UserManagerSettingsStore extends OidcClientSettingsStore {
         this.revokeTokensOnSignout = revokeTokensOnSignout;
         this.includeIdTokenInSilentSignout = includeIdTokenInSilentSignout;
 
-        this.accessTokenExpiringNotificationTimeInSeconds = accessTokenExpiringNotificationTimeInSeconds;
+        this.accessTokenExpiringNotificationTimeInSeconds =
+            accessTokenExpiringNotificationTimeInSeconds;
 
         if (userStore) {
             this.userStore = userStore;
-        }
-        else {
-            const store = typeof window !== "undefined" ? window.sessionStorage : new InMemoryWebStorage();
+        } else {
+            const store =
+                typeof window !== "undefined"
+                    ? window.sessionStorage
+                    : new InMemoryWebStorage();
             this.userStore = new WebStorageStateStore({ store });
         }
     }

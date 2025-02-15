@@ -1175,7 +1175,7 @@ export class UserManagerSettingsStore extends OidcClientSettingsStore {
     // (undocumented)
     readonly stopCheckSessionOnError: boolean;
     // (undocumented)
-    readonly userStore: WebStorageStateStore;
+    readonly userStore: StateStore;
     // (undocumented)
     readonly validateSubOnSilentRenew: boolean;
 }
